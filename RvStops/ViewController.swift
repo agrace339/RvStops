@@ -10,14 +10,34 @@ import UIKit
 import MapKit
 import CoreLocation
 
-class ViewController: UIViewController {
+class ViewController: UIViewController, CLLocationManagerDelegate {
 
     @IBOutlet var mapView: MKMapView!
     
+    let manager = CLLocationManager()
+    
+    
+    //runs everytime user moves
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]){
+        let currentLocation = locations[0]
+        
+        let span:MKCoordinateSpan = MKCoordinateSpanMake(0.01, 0.01)
+        let myLocation:CLLocationCoordinate2D = CLLocationCoordinate2DMake(currentLocation.coordinate.latitude,currentLocation.coordinate.longitude)
+        let region: MKCoordinateRegion = MKCoordinateRegionMake(myLocation, span)
+        mapView.setRegion(region, animated: true)
+        
+        self.mapView.showsUserLocation = true
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
         
+        manager.delegate = self
+        manager.activityType = CLActivityType(rawValue: CLActivityType.RawValue(kCLLocationAccuracyBest))!
+        manager.requestWhenInUseAuthorization()
+        manager.startUpdatingLocation()
+        
+        /*//add pointer
         //this is a location
         let location = CLLocationCoordinate2DMake(48.88182, 2.43952)
         
@@ -40,6 +60,7 @@ class ViewController: UIViewController {
         
         //adding pointer to map
         mapView.addAnnotation(annotation)
+ */
     }
 
     override func didReceiveMemoryWarning() {
