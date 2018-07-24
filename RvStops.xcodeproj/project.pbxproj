@@ -12,6 +12,7 @@
 		A08F6BB22107902A00CAD95B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A08F6BB02107902A00CAD95B /* Main.storyboard */; };
 		A08F6BB42107902B00CAD95B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A08F6BB32107902B00CAD95B /* Assets.xcassets */; };
 		A08F6BB72107902B00CAD95B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A08F6BB52107902B00CAD95B /* LaunchScreen.storyboard */; };
+		A08F6BC0210796C100CAD95B /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A08F6BBF210796C100CAD95B /* CoreLocation.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -22,6 +23,7 @@
 		A08F6BB32107902B00CAD95B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A08F6BB62107902B00CAD95B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		A08F6BB82107902B00CAD95B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A08F6BBF210796C100CAD95B /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -29,6 +31,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A08F6BC0210796C100CAD95B /* CoreLocation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -40,6 +43,7 @@
 			children = (
 				A08F6BAB2107902A00CAD95B /* RvStops */,
 				A08F6BAA2107902A00CAD95B /* Products */,
+				A08F6BBE210796C000CAD95B /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -62,6 +66,14 @@
 				A08F6BB82107902B00CAD95B /* Info.plist */,
 			);
 			path = RvStops;
+			sourceTree = "<group>";
+		};
+		A08F6BBE210796C000CAD95B /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				A08F6BBF210796C100CAD95B /* CoreLocation.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -281,6 +293,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 7GJ7M63C9Q;
 				INFOPLIST_FILE = RvStops/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -298,6 +311,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 7GJ7M63C9Q;
 				INFOPLIST_FILE = RvStops/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
