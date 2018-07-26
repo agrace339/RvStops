@@ -9,6 +9,7 @@
 import UIKit
 import MapKit
 import CoreLocation
+//import Alamofire
 
 class ViewController: UIViewController, CLLocationManagerDelegate {
     
@@ -17,27 +18,13 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
     @IBOutlet weak var endLocationTextField: UITextField!
     
     let manager = CLLocationManager()
-    let yelpAPIurl = URL(string: "https://api.yelp.com/v3/businesses/search")
+    let yelpAPIurl = URL(string: "https://api.yelp.com/v3/businesses/search?term=RVparks&=location=sanfranciscoUSA")
     var span:MKCoordinateSpan = MKCoordinateSpanMake(0.01, 0.01)
     var enRoute = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
-//        let task = URLSession.shared.dataTask(with: yelpAPIurl!) { (data, response, error) in
-//            if error != nil{
-//                print("Error")
-//            }
-//            else{
-//                if let content = data{
-//                    do
-//                    {
-//                        let myJson = try JSONSerialization.jsonObject(with: content, options: JSONSerialization.ReadingOptions.mutableContainers)
-//                    }
-//                }
-//
-//            }
-//        }
         manager.requestWhenInUseAuthorization()
         
         if CLLocationManager.locationServicesEnabled() {
@@ -48,19 +35,21 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
             
             zoomCurrentLocation(location: manager.location != nil ? manager.location! : CLLocation(latitude: 0,longitude: 0), zoom: 0.1)
             
-            let startAddress = addressToCoords(address: startLocationTextField.text != nil ? startLocationTextField.text! : "")
             
-            let annotation = MKPointAnnotation()
             
-            //placing coord
-            annotation.coordinate = startAddress
-            
-            //naming pointer
-            annotation.title = startLocationTextField.text
-            
-            //adding pointer to map
-            mapView.addAnnotation(annotation)
-            
+//            let startAddress = addressToCoords(address: startLocationTextField.text != nil ? startLocationTextField.text! : "")
+//
+//            let annotation = MKPointAnnotation()
+//
+//            //placing coord
+//            annotation.coordinate = startAddress
+//
+//            //naming pointer
+//            annotation.title = startLocationTextField.text
+//
+//            //adding pointer to map
+//            mapView.addAnnotation(annotation)
+//
         }
         
     }

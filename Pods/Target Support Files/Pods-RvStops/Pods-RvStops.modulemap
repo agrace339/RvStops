@@ -1,0 +1,6 @@
+framework module Pods_RvStops {
+  umbrella header "Pods-RvStops-umbrella.h"
+
+  export *
+  module * { export * }
+}
