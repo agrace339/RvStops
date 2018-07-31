@@ -29,6 +29,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
     var yelpAPIurl = "https://api.yelp.com/v3/businesses/search?term=rv-parks&latitude=37.7648&longitude=-145.463"
     
     var RvBusinesses:[RVpark] = []
+    var RvBusinessesAnno:[RVannotation] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -56,15 +57,23 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         super.didReceiveMemoryWarning()
     }
     
+//    func mapView(mapView: MKMapView, didSelectAnnotationView view: MKAnnotationView) {
+//        print("Annotation selected")
+//
+//        if let annotation = view.annotation as? RVannotation {
+//            print("Your annotation title: \(annotation.title)");
+//        }
+//    }
+    
     //runs everytime user moves
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]){
         let currentLocation = locations[0]
         
         if enRoute {
-            zoomCurrentLocation(location: currentLocation, zoom: 0.01)
+           // zoomCurrentLocation(location: currentLocation, zoom: 0.01)
         }
         else {
-            zoomCurrentLocation(location: currentLocation, zoom: span.latitudeDelta)
+         //   zoomCurrentLocation(location: currentLocation, zoom: span.latitudeDelta)
         }
     }
     
@@ -113,11 +122,11 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
                     if let value = response.result.value{
                         for i in 0...(JSON(value)["businesses"]).count {
                             self.RvBusinesses.append(RVpark(json: JSON(value)["businesses"][i], index: i))
-                            print(self.RvBusinesses[i].name)
-                            var rvAnnotation:RVannotation = RVannotation(rvPark: self.RvBusinesses[i])
+                            
+                            let rvAnnotation:RVannotation = RVannotation(rvPark: self.RvBusinesses[i])
+                            self.RvBusinessesAnno.append(rvAnnotation)
                             self.mapView.addAnnotation(rvAnnotation)
                         }
-                        print("Count: \(self.RvBusinesses.count)")
                     }
                 case .failure(let error):
                     print(error)
@@ -150,6 +159,7 @@ extension ViewController: GMSAutocompleteViewControllerDelegate {
         }
         
         yelpAPIurl = "https://api.yelp.com/v3/businesses/search?term=rv-parks&latitude=\(locationCoords.latitude)&longitude=\(locationCoords.longitude)"
+        
         sendAlamoRequest(url: yelpAPIurl)
         
         dismiss(animated: true, completion: nil)
