@@ -8,6 +8,7 @@
 
 import Foundation
 import SwiftyJSON
+import MapKit
 
 struct RVpark {
     let name: String
@@ -17,14 +18,18 @@ struct RVpark {
     let categories: String
     let address: String
     let ID: String
+    let coordinates: CLLocationCoordinate2D
+    let index: Int
     
-    init(json: JSON) {
-        self.name = json["businesses"][0]["name"].stringValue
-        self.imageURL = json["businesses"][0]["image_url"].stringValue
-        self.rating = json["businesses"][0]["rating"].doubleValue
-        self.categories = json["businesses"][0]["categories"]["title"].stringValue
-        self.distance = json["businesses"][0]["distance"].doubleValue
-        self.address = json["businesses"][0]["display_address"].stringValue
-        self.ID = json["businesses"][0]["id"].stringValue
+    init(json: JSON, index: Int) {
+        self.name = json["name"].stringValue
+        self.imageURL = json["image_url"].stringValue
+        self.rating = json["rating"].doubleValue
+        self.categories = json["categories"]["title"].stringValue
+        self.distance = json["distance"].doubleValue
+        self.address = json["display_address"].stringValue
+        self.ID = json["id"].stringValue
+        self.coordinates = CLLocationCoordinate2D(latitude: json["coordinates"]["latitude"].doubleValue, longitude: json["coordinates"]["longitude"].doubleValue)
+        self.index = index
     }
 }

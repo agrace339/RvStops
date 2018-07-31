@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		A0134D58210A363800A18853 /* RVpark.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0134D57210A363800A18853 /* RVpark.swift */; };
+		A040B6BC2110D2B400024A26 /* RVannotations.swift in Sources */ = {isa = PBXBuildFile; fileRef = A040B6BB2110D2B400024A26 /* RVannotations.swift */; };
 		A08F6BAD2107902A00CAD95B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08F6BAC2107902A00CAD95B /* AppDelegate.swift */; };
 		A08F6BAF2107902A00CAD95B /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08F6BAE2107902A00CAD95B /* ViewController.swift */; };
 		A08F6BB22107902A00CAD95B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A08F6BB02107902A00CAD95B /* Main.storyboard */; };
@@ -20,6 +21,7 @@
 /* Begin PBXFileReference section */
 		6094600B87FDAE43B1919AF5 /* Pods-RvStops.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RvStops.debug.xcconfig"; path = "Pods/Target Support Files/Pods-RvStops/Pods-RvStops.debug.xcconfig"; sourceTree = "<group>"; };
 		A0134D57210A363800A18853 /* RVpark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RVpark.swift; sourceTree = "<group>"; };
+		A040B6BB2110D2B400024A26 /* RVannotations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RVannotations.swift; sourceTree = "<group>"; };
 		A08F6BA92107902A00CAD95B /* RvStops.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RvStops.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A08F6BAC2107902A00CAD95B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A08F6BAE2107902A00CAD95B /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -73,6 +75,7 @@
 				A08F6BB52107902B00CAD95B /* LaunchScreen.storyboard */,
 				A08F6BB82107902B00CAD95B /* Info.plist */,
 				A0134D57210A363800A18853 /* RVpark.swift */,
+				A040B6BB2110D2B400024A26 /* RVannotations.swift */,
 			);
 			path = RvStops;
 			sourceTree = "<group>";
@@ -107,6 +110,7 @@
 				A08F6BA62107902A00CAD95B /* Frameworks */,
 				A08F6BA72107902A00CAD95B /* Resources */,
 				ED307D6B07C59C43DCA2C6B8 /* [CP] Embed Pods Frameworks */,
+				6919B8B41B5B2E66039B1D71 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -164,6 +168,28 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		6919B8B41B5B2E66039B1D71 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-RvStops/Pods-RvStops-resources.sh",
+				"${PODS_ROOT}/GoogleMaps/Maps/Frameworks/GoogleMaps.framework/Resources/GoogleMaps.bundle",
+				"${PODS_ROOT}/GooglePlacePicker/Frameworks/GooglePlacePicker.framework/Resources/GooglePlacePicker.bundle",
+				"${PODS_ROOT}/GooglePlaces/Frameworks/GooglePlaces.framework/Resources/GooglePlaces.bundle",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleMaps.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GooglePlacePicker.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GooglePlaces.bundle",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-RvStops/Pods-RvStops-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		ED307D6B07C59C43DCA2C6B8 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -211,6 +237,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A040B6BC2110D2B400024A26 /* RVannotations.swift in Sources */,
 				A08F6BAF2107902A00CAD95B /* ViewController.swift in Sources */,
 				A0134D58210A363800A18853 /* RVpark.swift in Sources */,
 				A08F6BAD2107902A00CAD95B /* AppDelegate.swift in Sources */,

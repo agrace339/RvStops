@@ -9,59 +9,57 @@
 import UIKit
 import MapKit
 import CoreLocation
-//import Alamofire
+import Alamofire
+import SwiftyJSON
+import GooglePlaces
 
 class ViewController: UIViewController, CLLocationManagerDelegate {
     
     @IBOutlet var mapView: MKMapView!
     @IBOutlet weak var startLocationTextField: UITextField!
-    @IBOutlet weak var endLocationTextField: UITextField!
     
     let manager = CLLocationManager()
-    let yelpAPIurl = URL(string: "https://api.yelp.com/v3/businesses/search?term=RVparks&=location=sanfranciscoUSA")
-    var span:MKCoordinateSpan = MKCoordinateSpanMake(0.01, 0.01)
+    var span: MKCoordinateSpan = MKCoordinateSpanMake(0.01, 0.01)
+    var myLocation:CLLocationCoordinate2D = CLLocationCoordinate2D(latitude: 37.7648, longitude: 0)
     var enRoute = false
-
+    
+    var locationAddress:String = ""
+    var locationCoords: CLLocationCoordinate2D = CLLocationCoordinate2D(latitude: 37.7648, longitude: 0)
+    
+    var yelpAPIurl = "https://api.yelp.com/v3/businesses/search?term=rv-parks&latitude=37.7648&longitude=-145.463"
+    
+    var RvBusinesses:[RVpark] = []
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        //gets user's permission for location
         manager.requestWhenInUseAuthorization()
         
+        //if approved
         if CLLocationManager.locationServicesEnabled() {
+            //load current location (blue dot)
             manager.delegate = self
             manager.activityType = CLActivityType(rawValue: CLActivityType.RawValue(kCLLocationAccuracyBest))!
             
             manager.startUpdatingLocation()
             
-            zoomCurrentLocation(location: manager.location != nil ? manager.location! : CLLocation(latitude: 0,longitude: 0), zoom: 0.1)
+            //zoom on current location
+            zoomCurrentLocation(location: manager.location != nil ? manager.location! : CLLocation(latitude: 37.7648,longitude:  -122.463), zoom: 0.1)
             
-            
-            
-//            let startAddress = addressToCoords(address: startLocationTextField.text != nil ? startLocationTextField.text! : "")
-//
-//            let annotation = MKPointAnnotation()
-//
-//            //placing coord
-//            annotation.coordinate = startAddress
-//
-//            //naming pointer
-//            annotation.title = startLocationTextField.text
-//
-//            //adding pointer to map
-//            mapView.addAnnotation(annotation)
-//
+            //getting yelp api
+            sendAlamoRequest(url: yelpAPIurl)
         }
-        
     }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
     //runs everytime user moves
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]){
         let currentLocation = locations[0]
+        
         if enRoute {
             zoomCurrentLocation(location: currentLocation, zoom: 0.01)
         }
@@ -72,9 +70,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
     
     //focuses on current location of user
     func zoomCurrentLocation(location: CLLocation, zoom: Double){
-        
         span = MKCoordinateSpanMake(zoom, zoom)
-        let myLocation:CLLocationCoordinate2D = CLLocationCoordinate2DMake(location.coordinate.latitude, location.coordinate.longitude)
+        myLocation = CLLocationCoordinate2DMake(location.coordinate.latitude, location.coordinate.longitude)
         let region: MKCoordinateRegion = MKCoordinateRegionMake(myLocation, span)
         mapView.setRegion(region, animated: true)
         
@@ -84,46 +81,95 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
     
     //turns addresses to Coordinates
     func addressToCoords(address: String) -> CLLocationCoordinate2D {
-        let geocoder = CLGeocoder()
-        var coordinates:CLLocationCoordinate2D = CLLocationCoordinate2D(latitude: 0.0,longitude: 0.0)
+        var geocoder = CLGeocoder()
+        var lat:Double = 0.0
+        var lon:Double = 0.0
         
-        geocoder.geocodeAddressString(address, completionHandler: {(placemarks, error) -> Void in
-            if(error != nil){
-                print("Error", error as Any)
-            }
-            if let placemark = placemarks?.first {
-                coordinates = placemark.location!.coordinate
-            }
-        })
+        geocoder.geocodeAddressString(address) {
+            placemarks, error in
+            let placemark = placemarks?.first
+            lat = (placemark?.location?.coordinate.latitude)!
+            lon = (placemark?.location?.coordinate.longitude)!
+            print("Lat: \(lat), Lon: \(lon)")
+        }
         
-        return coordinates
+        return CLLocationCoordinate2D(latitude: lat, longitude: lon)
     }
     
+    //gets yelp data
+    func sendAlamoRequest(url: String){
+        var request = URLRequest(url: NSURL(string: url)! as URL)
+        request.httpMethod = "GET"
+        request.setValue("Bearer 49GFmbGCDzHznADJ-YGDYeoULqygpIzlti6dQi0Ht140wC9ZX-e1NazgdieCX0YAgIgKFuYdqBv3RL-Hq6h6wG_Dxt-SkkFoIUqC2xXqyvlgBj0TI_PmZwM5f-FYW3Yx", forHTTPHeaderField: "Authorization")
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        //alamo request
+        Alamofire.request(request)
+            .validate()
+            .responseJSON { (response) -> Void in
+                switch response.result {
+                case .success:
+                    print("we're in")
+                    if let value = response.result.value{
+                        for i in 0...(JSON(value)["businesses"]).count {
+                            self.RvBusinesses.append(RVpark(json: JSON(value)["businesses"][i], index: i))
+                            print(self.RvBusinesses[i].name)
+                            var rvAnnotation:RVannotation = RVannotation(rvPark: self.RvBusinesses[i])
+                            self.mapView.addAnnotation(rvAnnotation)
+                        }
+                        print("Count: \(self.RvBusinesses.count)")
+                    }
+                case .failure(let error):
+                    print(error)
+                }
+                
+        }
+        
+    }
+    
+    //Button to ListView
     @IBAction func listButtonPressed(_ sender: Any) {
+        self.performSegue(withIdentifier: "toListView", sender: Any?.self)
+    }
+    
+    //When user starts typing
+    @IBAction func startAddressTyping(_ sender: Any) {
+        let autocompleteController = GMSAutocompleteViewController()
+        autocompleteController.delegate = self
+        present(autocompleteController, animated: true, completion: nil)
     }
 }
 
-/*//add pointer
- //this is a location
- let location = CLLocationCoordinate2DMake(48.88182, 2.43952)
- 
- //how zoomed in
- let span = MKCoordinateSpanMake(0.002, 0.002)
- 
- //location of map view
- let region = MKCoordinateRegion(center: location, span:span)
- mapView.setRegion(region, animated: true)
- 
- //initialize location pointer
- let annotation = MKPointAnnotation()
- 
- //placing coord
- annotation.coordinate = location
- 
- //naming pointer
- annotation.title = "Pizza Place"
- annotation.subtitle = "Name of Pizza Place"
- 
- //adding pointer to map
- mapView.addAnnotation(annotation)
- */
+
+extension ViewController: GMSAutocompleteViewControllerDelegate {
+    func viewController(_ viewController: GMSAutocompleteViewController, didAutocompleteWith place: GMSPlace) {
+        locationAddress = place.formattedAddress!
+        
+        if locationAddress != "" {
+            locationCoords = addressToCoords(address: locationAddress)
+        }
+        
+        yelpAPIurl = "https://api.yelp.com/v3/businesses/search?term=rv-parks&latitude=\(locationCoords.latitude)&longitude=\(locationCoords.longitude)"
+        sendAlamoRequest(url: yelpAPIurl)
+        
+        dismiss(animated: true, completion: nil)
+    }
+    
+    func viewController(_ viewController: GMSAutocompleteViewController, didFailAutocompleteWithError error: Error) {
+        print("Error: ", error.localizedDescription)
+    }
+    
+    func wasCancelled(_ viewController: GMSAutocompleteViewController) {
+        dismiss(animated: true, completion: nil)
+    }
+    
+    func didRequestAutocompletePredictions(_ viewController: GMSAutocompleteViewController) {
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+    }
+    
+    func didUpdateAutocompletePredictions(_ viewController: GMSAutocompleteViewController) {
+        UIApplication.shared.isNetworkActivityIndicatorVisible = false
+    }
+    
+    
+}
