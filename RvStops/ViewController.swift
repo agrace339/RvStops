@@ -13,7 +13,7 @@ import Alamofire
 import SwiftyJSON
 import GooglePlaces
 
-class ViewController: UIViewController, CLLocationManagerDelegate {
+class ViewController: UIViewController, CLLocationManagerDelegate, MKMapViewDelegate {
     
     @IBOutlet var mapView: MKMapView!
     @IBOutlet weak var startLocationTextField: UITextField!
@@ -161,6 +161,37 @@ extension ViewController: GMSAutocompleteViewControllerDelegate {
         yelpAPIurl = "https://api.yelp.com/v3/businesses/search?term=rv-parks&latitude=\(locationCoords.latitude)&longitude=\(locationCoords.longitude)"
         
         sendAlamoRequest(url: yelpAPIurl)
+        
+        let sourcePin = RouteAnnotation(locationName: "Start", coordinates: myLocation)
+        let destinationPin = RouteAnnotation(locationName: "End", coordinates: locationCoords)
+        self.mapView.addAnnotation(sourcePin)
+        self.mapView.addAnnotation(destinationPin)
+        
+        let sourcePlaceMark = MKPlacemark(coordinate: myLocation)
+        let destinationPlaceMark = MKPlacemark(coordinate: locationCoords)
+        
+        let directionRequest = MKDirectionsRequest()
+        directionRequest.source = MKMapItem(placemark: sourcePlaceMark)
+        directionRequest.destination = MKMapItem(placemark: destinationPlaceMark)
+        directionRequest.transportType = .automobile
+        
+        let directions = MKDirections(request: directionRequest)
+        directions.calculate{ (response, error) in
+            guard let directionResponse = response else {
+                if let error = error {
+                    print("we have error getting directions==\(error.localizedDescription)")
+                }
+                return
+            }
+            
+            let route = directionResponse.routes[0]
+            self.mapView.add(route.polyline, level: .aboveRoads)
+            
+            let rect = route.polyline.boundingMapRect
+            self.mapView.setRegion(MKCoordinateRegionForMapRect(rect), animated: true)
+        }
+        
+        self.mapView.delegate = self
         
         dismiss(animated: true, completion: nil)
     }

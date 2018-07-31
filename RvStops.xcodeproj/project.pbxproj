@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		A0134D58210A363800A18853 /* RVpark.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0134D57210A363800A18853 /* RVpark.swift */; };
+		A01ECF7F211115AD0002E325 /* RouteAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A01ECF7E211115AD0002E325 /* RouteAnnotation.swift */; };
 		A040B6BC2110D2B400024A26 /* RVannotations.swift in Sources */ = {isa = PBXBuildFile; fileRef = A040B6BB2110D2B400024A26 /* RVannotations.swift */; };
 		A08F6BAD2107902A00CAD95B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08F6BAC2107902A00CAD95B /* AppDelegate.swift */; };
 		A08F6BAF2107902A00CAD95B /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08F6BAE2107902A00CAD95B /* ViewController.swift */; };
@@ -21,6 +22,7 @@
 /* Begin PBXFileReference section */
 		6094600B87FDAE43B1919AF5 /* Pods-RvStops.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RvStops.debug.xcconfig"; path = "Pods/Target Support Files/Pods-RvStops/Pods-RvStops.debug.xcconfig"; sourceTree = "<group>"; };
 		A0134D57210A363800A18853 /* RVpark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RVpark.swift; sourceTree = "<group>"; };
+		A01ECF7E211115AD0002E325 /* RouteAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteAnnotation.swift; sourceTree = "<group>"; };
 		A040B6BB2110D2B400024A26 /* RVannotations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RVannotations.swift; sourceTree = "<group>"; };
 		A08F6BA92107902A00CAD95B /* RvStops.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RvStops.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A08F6BAC2107902A00CAD95B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -76,6 +78,7 @@
 				A08F6BB82107902B00CAD95B /* Info.plist */,
 				A0134D57210A363800A18853 /* RVpark.swift */,
 				A040B6BB2110D2B400024A26 /* RVannotations.swift */,
+				A01ECF7E211115AD0002E325 /* RouteAnnotation.swift */,
 			);
 			path = RvStops;
 			sourceTree = "<group>";
@@ -240,6 +243,7 @@
 				A040B6BC2110D2B400024A26 /* RVannotations.swift in Sources */,
 				A08F6BAF2107902A00CAD95B /* ViewController.swift in Sources */,
 				A0134D58210A363800A18853 /* RVpark.swift in Sources */,
+				A01ECF7F211115AD0002E325 /* RouteAnnotation.swift in Sources */,
 				A08F6BAD2107902A00CAD95B /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
