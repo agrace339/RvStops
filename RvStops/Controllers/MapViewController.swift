@@ -65,7 +65,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
         print(userLocation)
         
         //getting yelp api
-        sendAlamoRequest(url: yelpAPIurl)
+        sendAlamoRequest(url: yelpAPIurl, clear: false)
     }
     
     //runs everytime user moves
@@ -82,13 +82,14 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
         
     }
     
-    func sendAlamoRequest(coord: CLLocationCoordinate2D){
-        var yelpAPIurl = "https://api.yelp.com/v3/businesses/search?term=rv-parks&latitude=37.7648&longitude=-145.463"
+    func sendAlamoRequest(coord: CLLocationCoordinate2D, clear: Bool){
+        yelpAPIurl = "https://api.yelp.com/v3/businesses/search?term=rv-parks&latitude=\(coord.latitude)&longitude=\(coord.longitude)"
+        sendAlamoRequest(url: yelpAPIurl, clear: clear)
     }
     
     //gets yelp data
-    func sendAlamoRequest(url: String) {
-        mapView.removeAnnotations(mapView.annotations)
+    func sendAlamoRequest(url: String, clear: Bool) {
+        if clear {mapView.removeAnnotations(mapView.annotations)}
         
         var request = URLRequest(url: NSURL(string: url)! as URL)
         request.httpMethod = "GET"
@@ -149,11 +150,8 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
             let route = response.routes[0]
             self.mapView.add(route.polyline, level: .aboveRoads)
             
-            var i: Int = 0
             for step in route.steps {
-                sendAlamoRequest()
-                step.polyline.coordinate
-
+                self.sendAlamoRequest(coord: step.polyline.coordinate, clear: false)
             }
             
             let rekt = route.polyline.boundingMapRect
@@ -170,7 +168,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
             overLayRenderer.strokeColor = UIColor(red: 0.25, green: 0.53, blue: 0.77, alpha: 1.0)
             return overLayRenderer
         }
-
+        
         return MKOverlayRenderer(overlay: overlay)
     }
     
@@ -185,7 +183,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
         autocompleteController.delegate = self
         present(autocompleteController, animated: true, completion: nil)
     }
-
+    
     @IBAction func focusButtonPressed(_ sender: Any) {
         zoomLocation(location: userLocation, zoom: 0.5)
     }

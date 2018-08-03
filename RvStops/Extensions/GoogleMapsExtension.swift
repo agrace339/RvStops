@@ -17,7 +17,7 @@ extension MapViewController: GMSAutocompleteViewControllerDelegate {
         
         yelpAPIurl = "https://api.yelp.com/v3/businesses/search?term=rv-parks&latitude=\(locationCoords.latitude)&longitude=\(locationCoords.longitude)"
         
-        sendAlamoRequest(url: yelpAPIurl)
+        sendAlamoRequest(url: yelpAPIurl, clear: true)
         
         zoomLocation(location: locationCoords, zoom: 1)
         
