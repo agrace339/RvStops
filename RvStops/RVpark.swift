@@ -10,10 +10,11 @@ import Foundation
 import SwiftyJSON
 import MapKit
 
-struct RVpark {
+public struct RVpark {
     let name: String
     let imageURL: String
     let rating: Double
+    let ratingImage: UIImage
     let distance: Double
     let categories: String
     let address: String
@@ -31,5 +32,39 @@ struct RVpark {
         self.ID = json["id"].stringValue
         self.coordinates = CLLocationCoordinate2D(latitude: json["coordinates"]["latitude"].doubleValue, longitude: json["coordinates"]["longitude"].doubleValue)
         self.index = index
+        
+        if rating == 5 {
+            ratingImage = #imageLiteral(resourceName: "small_5.png")
+        }
+        else if rating == 4.5 {
+            ratingImage = #imageLiteral(resourceName: "small_4_half.png")
+        }
+        else if rating == 4 {
+            ratingImage = #imageLiteral(resourceName: "small_4.png")
+        }
+        else if rating == 3.5 {
+            ratingImage = #imageLiteral(resourceName: "small_3_half.png")
+        }
+        else if rating == 3 {
+            ratingImage = #imageLiteral(resourceName: "small_3.png")
+        }
+        else if rating == 2.5 {
+            ratingImage = #imageLiteral(resourceName: "small_2_half.png")
+        }
+        else if rating == 2 {
+            ratingImage = #imageLiteral(resourceName: "small_2.png")
+        }
+        else if rating == 1.5 {
+            ratingImage = #imageLiteral(resourceName: "small_1_half.png")
+        }
+        else if rating == 1 {
+            ratingImage = #imageLiteral(resourceName: "small_1.png")
+        }
+        else if rating == 0 {
+            ratingImage = #imageLiteral(resourceName: "small_0.png")
+        }
+        else{
+            ratingImage = #imageLiteral(resourceName: "small_0.png")
+        }
     }
 }

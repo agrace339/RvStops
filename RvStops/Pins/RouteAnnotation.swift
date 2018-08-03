@@ -1,5 +1,5 @@
 //
-//  RVannotations.swift
+//  RouteAnnotation.swift
 //  RvStops
 //
 //  Created by Anna Grace on 7/31/18.
@@ -9,15 +9,13 @@
 import Foundation
 import MapKit
 
-class RVannotation: NSObject, MKAnnotation {
+class RouteAnnotation: NSObject, MKAnnotation {
     let title: String?
-    let locationName: String
     let coordinate: CLLocationCoordinate2D
     
-    init(rvPark: RVpark) {
-        self.title = rvPark.name
-        self.locationName = rvPark.address
-        self.coordinate = rvPark.coordinates
+    init(title: String, coordinates: CLLocationCoordinate2D) {
+        self.title = title
+        self.coordinate = coordinates
         
         super.init()
     }
