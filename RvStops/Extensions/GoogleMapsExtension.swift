@@ -11,6 +11,7 @@ import GooglePlaces
 
 extension MapViewController: GMSAutocompleteViewControllerDelegate {
     func viewController(_ viewController: GMSAutocompleteViewController, didAutocompleteWith place: GMSPlace) {
+        self.mapView.removeOverlays(mapView.overlays)
         locationAddress = place.formattedAddress!
         locationCoords = place.coordinate
         startLocationTextField.text = locationAddress

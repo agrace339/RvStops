@@ -90,6 +90,7 @@
 		A0A898782113C4530012455D /* Yelp_trademark_PMS_fullcolor.eps in Resources */ = {isa = PBXBuildFile; fileRef = A0A8986D2113C4530012455D /* Yelp_trademark_PMS_fullcolor.eps */; };
 		A0A898792113C4530012455D /* Yelp_trademark_PMS_fullcolor_outline.eps in Resources */ = {isa = PBXBuildFile; fileRef = A0A8986E2113C4530012455D /* Yelp_trademark_PMS_fullcolor_outline.eps */; };
 		A0A8987A2113C4530012455D /* Yelp_trademark_PMS_BW.eps in Resources */ = {isa = PBXBuildFile; fileRef = A0A8986F2113C4530012455D /* Yelp_trademark_PMS_BW.eps */; };
+		A0A8988A2114E2770012455D /* no_pic.png in Resources */ = {isa = PBXBuildFile; fileRef = A0A898892114E2770012455D /* no_pic.png */; };
 		FFE7D35FB9C667CBE3EA5854 /* Pods_RvStops.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF5A05A44265256344967124 /* Pods_RvStops.framework */; };
 /* End PBXBuildFile section */
 
@@ -191,6 +192,7 @@
 		A0A898862113C4590012455D /* Yelp_trademark_PMS_fullcolor.eps */ = {isa = PBXFileReference; lastKnownFileType = file; path = Yelp_trademark_PMS_fullcolor.eps; sourceTree = "<group>"; };
 		A0A898872113C4590012455D /* Yelp_trademark_PMS_fullcolor_outline.eps */ = {isa = PBXFileReference; lastKnownFileType = file; path = Yelp_trademark_PMS_fullcolor_outline.eps; sourceTree = "<group>"; };
 		A0A898882113C4590012455D /* Yelp_trademark_PMS_BW.eps */ = {isa = PBXFileReference; lastKnownFileType = file; path = Yelp_trademark_PMS_BW.eps; sourceTree = "<group>"; };
+		A0A898892114E2770012455D /* no_pic.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = no_pic.png; path = ../../../no_pic.png; sourceTree = "<group>"; };
 		A50C0DEEA4E0004558600511 /* Pods-RvStops.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RvStops.release.xcconfig"; path = "Pods/Target Support Files/Pods-RvStops/Pods-RvStops.release.xcconfig"; sourceTree = "<group>"; };
 		BF5A05A44265256344967124 /* Pods_RvStops.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RvStops.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -290,6 +292,7 @@
 		A0A896162113C4350012455D /* Photos */ = {
 			isa = PBXGroup;
 			children = (
+				A0A898892114E2770012455D /* no_pic.png */,
 				A0A8987B2113C4590012455D /* YelpLogo_Trademark */,
 				A0A896172113C44B0012455D /* yelp_stars */,
 			);
@@ -600,6 +603,7 @@
 				A0A8977D2113C44B0012455D /* small_1_half.png in Resources */,
 				A0A897C02113C44C0012455D /* regular_4_half@3x.png in Resources */,
 				A0A897B62113C44C0012455D /* regular_1_half@3x.png in Resources */,
+				A0A8988A2114E2770012455D /* no_pic.png in Resources */,
 				A0A898792113C4530012455D /* Yelp_trademark_PMS_fullcolor_outline.eps in Resources */,
 				A0A898702113C4530012455D /* Yelp_trademark_RGB_outline.png in Resources */,
 			);

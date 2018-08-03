@@ -16,7 +16,7 @@ class RvParkViewController: UIViewController{
     override func viewDidLoad() {
         super.viewDidLoad()
         loadPoster(urlString: RvBusinesses[row].imageURL)
-        nameLabel.text = RvBusinesses[row].name
+        nameLabel.text = RvBusinesses[row].name ?? "No Nombre"
     }
     
     func loadPoster(urlString: String) {
@@ -26,7 +26,7 @@ class RvParkViewController: UIViewController{
             }
         }
         else {
-            mainImage.image = #imageLiteral(resourceName: "Yelp_trademark_RGB.eps")
+            mainImage.image = #imageLiteral(resourceName: "no_pic.png")
         }
     }
 }

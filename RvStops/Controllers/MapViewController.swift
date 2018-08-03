@@ -38,6 +38,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
     
     //All parks and pins
     var RvBusinessesAnno:[MKPointAnnotation] = []
+    var RvBusinessesName:[String] = []
     
     
     override func viewDidLoad() {
@@ -62,7 +63,6 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
         else {
             print("Location is Nil")
         }
-        print(userLocation)
         
         //getting yelp api
         sendAlamoRequest(url: yelpAPIurl, clear: false)
@@ -84,12 +84,17 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
     
     func sendAlamoRequest(coord: CLLocationCoordinate2D, clear: Bool){
         yelpAPIurl = "https://api.yelp.com/v3/businesses/search?term=rv-parks&latitude=\(coord.latitude)&longitude=\(coord.longitude)"
+        print(yelpAPIurl)
         sendAlamoRequest(url: yelpAPIurl, clear: clear)
     }
     
     //gets yelp data
     func sendAlamoRequest(url: String, clear: Bool) {
-        if clear {mapView.removeAnnotations(mapView.annotations)}
+        if clear {
+            mapView.removeAnnotations(mapView.annotations)
+            self.RvBusinessesAnno = []
+            RvBusinesses = []
+        }
         
         var request = URLRequest(url: NSURL(string: url)! as URL)
         request.httpMethod = "GET"
@@ -102,10 +107,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
             .responseJSON { (response) -> Void in
                 switch response.result {
                 case .success:
-                    print("we're in")
                     if let value = response.result.value{
-                        self.RvBusinessesAnno = []
-                        RvBusinesses = []
                         for i in 0...(JSON(value)["businesses"]).count {
                             //add businesses to array
                             RvBusinesses.append(RVpark(json: JSON(value)["businesses"][i], index: i))
@@ -114,8 +116,12 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
                             let rvAnnotation = MKPointAnnotation()
                             rvAnnotation.title = RvBusinesses[i].name
                             rvAnnotation.coordinate = RvBusinesses[i].coordinates
-                            self.RvBusinessesAnno.append(rvAnnotation)
-                            self.mapView.addAnnotation(rvAnnotation)
+                            
+                            if !self.RvBusinessesName.contains(rvAnnotation.title!){
+                                self.RvBusinessesAnno.append(rvAnnotation)
+                                self.mapView.addAnnotation(rvAnnotation)
+                                self.RvBusinessesName.append(rvAnnotation.title!)
+                            }
                         }
                     }
                 case .failure(let error):
@@ -123,7 +129,8 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
                 }
                 
         }
-        
+        print("Business Annos: \(RvBusinessesAnno.count)")
+        self.mapView.addAnnotations(RvBusinessesAnno)
     }
     
     func directions(){
@@ -146,7 +153,6 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
                 }
                 return
             }
-            print("Still got it")
             let route = response.routes[0]
             self.mapView.add(route.polyline, level: .aboveRoads)
             
@@ -157,7 +163,9 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
             let rekt = route.polyline.boundingMapRect
             self.mapView.setRegion(MKCoordinateRegionForMapRect(rekt), animated: true)
         })
+        
     }
+    
     
     func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
         

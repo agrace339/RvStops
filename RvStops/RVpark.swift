@@ -11,7 +11,7 @@ import SwiftyJSON
 import MapKit
 
 public struct RVpark {
-    let name: String
+    let name: String?
     let imageURL: String
     let rating: Double
     let ratingImage: UIImage

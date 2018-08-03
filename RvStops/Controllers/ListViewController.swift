@@ -16,8 +16,8 @@ class ListViewController : UIViewController, UITableViewDelegate, UITableViewDat
     
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-    //    var integer = RvBusinesses.count -1 
-        return RvBusinesses.count
+        var i = RvBusinesses.count - 1
+        return i
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
