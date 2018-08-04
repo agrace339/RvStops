@@ -12,11 +12,13 @@ import UIKit
 class RvParkViewController: UIViewController{
     @IBOutlet weak var mainImage: UIImageView!
     @IBOutlet weak var nameLabel: UILabel!
+    @IBOutlet weak var ratingImage: UIImageView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         loadPoster(urlString: RvBusinesses[row].imageURL)
         nameLabel.text = RvBusinesses[row].name ?? "No Nombre"
+        ratingImage.image = RvBusinesses[row].ratingImage
     }
     
     func loadPoster(urlString: String) {

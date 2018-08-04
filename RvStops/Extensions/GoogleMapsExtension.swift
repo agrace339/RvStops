@@ -11,12 +11,14 @@ import GooglePlaces
 
 extension MapViewController: GMSAutocompleteViewControllerDelegate {
     func viewController(_ viewController: GMSAutocompleteViewController, didAutocompleteWith place: GMSPlace) {
-        self.mapView.removeOverlays(mapView.overlays)
+        if RvBusinessesAnno.count != 0 {
+            self.mapView.removeOverlays(mapView.overlays)
+        }
+        
         locationAddress = place.formattedAddress!
         locationCoords = place.coordinate
         startLocationTextField.text = locationAddress
-        
-        yelpAPIurl = "https://api.yelp.com/v3/businesses/search?term=rv-parks&latitude=\(locationCoords.latitude)&longitude=\(locationCoords.longitude)"
+        yelpAPIurl = "https://api.yelp.com/v3/businesses/search?term=rv-parks&latitude=\(locationCoords.latitude)&longitude=\(locationCoords.longitude)&radius=%5C16000"
         
         sendAlamoRequest(url: yelpAPIurl, clear: true)
         

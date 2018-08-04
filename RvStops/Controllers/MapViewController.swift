@@ -21,7 +21,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
     @IBOutlet var mapView: MKMapView!
     @IBOutlet weak var startLocationTextField: UITextField!
     @IBOutlet weak var focusButton: UIButton!
-    
+    @IBOutlet weak var yelpImage: UIImageView!
     
     //location variable
     let manager = CLLocationManager()
@@ -66,6 +66,8 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
         
         //getting yelp api
         sendAlamoRequest(url: yelpAPIurl, clear: false)
+        
+        yelpImage.image = #imageLiteral(resourceName: "Yelp_trademark_RGB.png")
     }
     
     //runs everytime user moves
@@ -128,10 +130,11 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
                     print(error)
                 }
                 
+                print("Business Annos: \(self.RvBusinessesAnno.count)")
+                self.mapView.addAnnotations(self.RvBusinessesAnno)
         }
-        print("Business Annos: \(RvBusinessesAnno.count)")
-        self.mapView.addAnnotations(RvBusinessesAnno)
     }
+    
     
     func directions(){
         let sourcePlacemark = MKPlacemark(coordinate: userLocation)
