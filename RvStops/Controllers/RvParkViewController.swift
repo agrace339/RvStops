@@ -17,7 +17,11 @@ class RvParkViewController: UIViewController{
     override func viewDidLoad() {
         super.viewDidLoad()
         loadPoster(urlString: RvBusinesses[row].imageURL)
-        nameLabel.text = RvBusinesses[row].name ?? "No Nombre"
+        nameLabel.text = RvBusinesses[row].name
+        if nameLabel.text! == ""{
+            nameLabel.text = "No Nombre"
+        }
+
         ratingImage.image = RvBusinesses[row].ratingImage
     }
     

@@ -34,12 +34,13 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
     var locationCoords: CLLocationCoordinate2D = CLLocationCoordinate2D()
     
     //yelpURL
-    var yelpAPIurl = "https://api.yelp.com/v3/businesses/search?term=rv-parks&latitude=37.7648&longitude=-145.463"
+    var yelpAPIurl = "https://api.yelp.com/v3/businesses/search?term=rv-parks&latitude=37.7648&longitude=-145.463&radius=10000"
     
     //All parks and pins
     var RvBusinessesAnno:[MKPointAnnotation] = []
     var RvBusinessesName:[String] = []
     
+    var alamoError: String = " "
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -85,7 +86,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
     }
     
     func sendAlamoRequest(coord: CLLocationCoordinate2D, clear: Bool){
-        yelpAPIurl = "https://api.yelp.com/v3/businesses/search?term=rv-parks&latitude=\(coord.latitude)&longitude=\(coord.longitude)"
+        yelpAPIurl = "https://api.yelp.com/v3/businesses/search?term=rv-parks&latitude=\(coord.latitude)&longitude=\(coord.longitude)&radius=10000"
         print(yelpAPIurl)
         sendAlamoRequest(url: yelpAPIurl, clear: clear)
     }
@@ -118,21 +119,22 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
                             let rvAnnotation = MKPointAnnotation()
                             rvAnnotation.title = RvBusinesses[i].name
                             rvAnnotation.coordinate = RvBusinesses[i].coordinates
-                            
-                            if !self.RvBusinessesName.contains(rvAnnotation.title!){
-                                self.RvBusinessesAnno.append(rvAnnotation)
-                                self.mapView.addAnnotation(rvAnnotation)
-                                self.RvBusinessesName.append(rvAnnotation.title!)
-                            }
+                            self.RvBusinessesAnno.append(rvAnnotation)
+                            self.mapView.addAnnotation(rvAnnotation)
                         }
                     }
                 case .failure(let error):
-                    print(error)
+                    if error.localizedDescription == "Response status code was unacceptable: 429." {
+                        print("waiting")
+                        usleep(useconds_t(60))
+                        self.sendAlamoRequest(url: url, clear: false)
+                    }
+                    
+                    print(error.localizedDescription)
                 }
-                
-                print("Business Annos: \(self.RvBusinessesAnno.count)")
-                self.mapView.addAnnotations(self.RvBusinessesAnno)
         }
+        
+        print("Business Annos: \(self.RvBusinessesAnno.count)")
     }
     
     
@@ -159,10 +161,19 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
             let route = response.routes[0]
             self.mapView.add(route.polyline, level: .aboveRoads)
             
+            //
+            var i = 0.0
             for step in route.steps {
-                self.sendAlamoRequest(coord: step.polyline.coordinate, clear: false)
+                i += step.distance
+                if i>=1000{
+                    usleep(useconds_t(30))
+                    self.sendAlamoRequest(coord: step.polyline.coordinate, clear: false)
+                    i = 0
+                }
             }
             
+            self.mapView.addAnnotations(self.RvBusinessesAnno)
+            print("businesses collected")
             let rekt = route.polyline.boundingMapRect
             self.mapView.setRegion(MKCoordinateRegionForMapRect(rekt), animated: true)
         })

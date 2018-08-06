@@ -170,6 +170,7 @@
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="yHa-p9-3Cw">
                                         <rect key="frame" x="10" y="44" width="260" height="46"/>
                                         <constraints>
+                                            <constraint firstAttribute="height" constant="46" id="4Tq-LA-fHt"/>
                                             <constraint firstAttribute="width" constant="260" id="pSd-0E-9id"/>
                                         </constraints>
                                     </imageView>
@@ -181,7 +182,7 @@
                                     <constraint firstItem="yHa-p9-3Cw" firstAttribute="leading" secondItem="I0T-JJ-zin" secondAttribute="leading" constant="10" id="4Ro-ui-LRy"/>
                                     <constraint firstItem="cJm-i4-fGG" firstAttribute="leading" secondItem="I0T-JJ-zin" secondAttribute="leading" constant="10" id="E6I-GY-ngM"/>
                                     <constraint firstAttribute="height" constant="100" id="TNR-DF-nAp"/>
-                                    <constraint firstItem="yHa-p9-3Cw" firstAttribute="top" secondItem="cJm-i4-fGG" secondAttribute="bottom" constant="10" id="UYk-5C-5nS"/>
+                                    <constraint firstItem="yHa-p9-3Cw" firstAttribute="top" relation="greaterThanOrEqual" secondItem="cJm-i4-fGG" secondAttribute="bottom" constant="10" id="UYk-5C-5nS"/>
                                     <constraint firstAttribute="bottom" secondItem="yHa-p9-3Cw" secondAttribute="bottom" constant="10" id="YI5-r9-vdz"/>
                                     <constraint firstItem="yHa-p9-3Cw" firstAttribute="top" secondItem="cJm-i4-fGG" secondAttribute="bottom" constant="10" id="woj-hZ-H09"/>
                                     <constraint firstAttribute="trailing" secondItem="cJm-i4-fGG" secondAttribute="trailing" constant="10" id="woj-tT-RIB"/>
