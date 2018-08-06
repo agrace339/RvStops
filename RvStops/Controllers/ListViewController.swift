@@ -16,7 +16,7 @@ class ListViewController : UIViewController, UITableViewDelegate, UITableViewDat
     
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        let i = RvBusinesses.count - 1
+        let i = RvBusinesses.count
         return i
     }
     

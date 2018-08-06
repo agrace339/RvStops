@@ -65,9 +65,6 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
             print("Location is Nil")
         }
         
-        //getting yelp api
-        sendAlamoRequest(url: yelpAPIurl, clear: false)
-        
         yelpImage.image = #imageLiteral(resourceName: "Yelp_trademark_RGB.png")
     }
     
@@ -85,14 +82,31 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
         
     }
     
-    func sendAlamoRequest(coord: CLLocationCoordinate2D, clear: Bool){
-        yelpAPIurl = "https://api.yelp.com/v3/businesses/search?term=rv-parks&latitude=\(coord.latitude)&longitude=\(coord.longitude)&radius=10000"
+    func sendAlamoRequest(coord: CLLocationCoordinate2D, clear: Bool, completion: (() -> Void)? = nil){
+        yelpAPIurl = "https://api.yelp.com/v3/businesses/search?term=rv-parks&catgories=mobileparks&latitude=\(coord.latitude)&longitude=\(coord.longitude)&radius=16000"
         print(yelpAPIurl)
-        sendAlamoRequest(url: yelpAPIurl, clear: clear)
+        sendAlamoRequest(url: yelpAPIurl, clear: clear, completion: completion)
     }
     
     //gets yelp data
-    func sendAlamoRequest(url: String, clear: Bool) {
+    fileprivate func addBusiness(_ park: RVpark) {
+        guard RvBusinesses.contains(where: { $0.ID == park.ID }) == false else {
+            print("we skipped :\(park.name ?? "unnamed")")
+            
+            return
+        }
+        
+        RvBusinesses.append(park)
+        
+        //add annotation to array
+        var rvAnnotation = MKPointAnnotation()
+        rvAnnotation.title = park.name
+        rvAnnotation.coordinate = park.coordinates
+        self.RvBusinessesAnno.append(rvAnnotation)
+        self.mapView.addAnnotation(rvAnnotation)
+    }
+    
+    func sendAlamoRequest(url: String, clear: Bool, completion: (() -> Void)? = nil) {
         if clear {
             mapView.removeAnnotations(mapView.annotations)
             self.RvBusinessesAnno = []
@@ -111,30 +125,36 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
                 switch response.result {
                 case .success:
                     if let value = response.result.value{
-                        for i in 0...(JSON(value)["businesses"]).count {
+                        print("JSON NUM PER CALL: \((JSON(value)["businesses"]).count))")
+                        let jsonData = JSON(value)
+                        for i in 0..<jsonData["businesses"].arrayValue.count {
+//                            usleep(1000)
                             //add businesses to array
-                            RvBusinesses.append(RVpark(json: JSON(value)["businesses"][i], index: i))
-                            
-                            //add annotation to array
-                            let rvAnnotation = MKPointAnnotation()
-                            rvAnnotation.title = RvBusinesses[i].name
-                            rvAnnotation.coordinate = RvBusinesses[i].coordinates
-                            self.RvBusinessesAnno.append(rvAnnotation)
-                            self.mapView.addAnnotation(rvAnnotation)
+                            let jsonPark = jsonData["businesses"].arrayValue[i]
+                            let park = RVpark(json: jsonPark, index: i)
+                            self.addBusiness(park)
                         }
+                        
+                        print(RvBusinesses)
+                        print("Business Annos: \(self.RvBusinessesAnno.count)")
+                        print("Business Annos: \(self.RvBusinessesAnno)")
+                        
+                        completion?()
+                        
                     }
                 case .failure(let error):
-                    if error.localizedDescription == "Response status code was unacceptable: 429." {
-                        print("waiting")
-                        usleep(useconds_t(60))
-                        self.sendAlamoRequest(url: url, clear: false)
-                    }
+//                    if error.localizedDescription == "Response status code was unacceptable: 429." {
+//                        print("waiting")
+//                        usleep(useconds_t(60))
+//                        self.sendAlamoRequest(url: url, clear: false)
+//                    }
                     
                     print(error.localizedDescription)
+                    completion?()
                 }
         }
         
-        print("Business Annos: \(self.RvBusinessesAnno.count)")
+        
     }
     
     
@@ -161,24 +181,50 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
             let route = response.routes[0]
             self.mapView.add(route.polyline, level: .aboveRoads)
             
-            //
             var i = 0.0
+            self.sendAlamoRequest(coord: self.userLocation, clear: false)
+            
+            var stepsEvery1000Km = [MKRouteStep]()
             for step in route.steps {
                 i += step.distance
                 if i>=1000{
-                    usleep(useconds_t(30))
-                    self.sendAlamoRequest(coord: step.polyline.coordinate, clear: false)
+//                    sleep(UInt32(1))
+//                    usleep(useconds_t(30))
+                    
+//
+//                    var rvAnnotation = MKPointAnnotation()
+//                    rvAnnotation.title = "Step \(i)"
+//                    rvAnnotation.coordinate = step.polyline.coordinate
+//                    self.mapView.addAnnotation(rvAnnotation)
+                    
+                    stepsEvery1000Km.append(step)
+                    
                     i = 0
                 }
             }
             
-            self.mapView.addAnnotations(self.RvBusinessesAnno)
+            func sendRequest(for steps: [MKRouteStep]) {
+                guard let currentStep = steps.first else {
+                    return
+                }
+                
+                
+                self.sendAlamoRequest(coord: currentStep.polyline.coordinate, clear: false) {
+                    let newSteps = Array<MKRouteStep>(steps.dropFirst())
+                    sendRequest(for: newSteps)
+                }
+            }
+            
+            sendRequest(for: stepsEvery1000Km)
+            
             print("businesses collected")
             let rekt = route.polyline.boundingMapRect
             self.mapView.setRegion(MKCoordinateRegionForMapRect(rekt), animated: true)
         })
         
+        print("Businesses: \(RvBusinessesAnno)")
     }
+    
     
     
     func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
