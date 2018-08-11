@@ -21,8 +21,14 @@ class ListViewController : UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = UITableViewCell(style: .default, reuseIdentifier: "listCell")
-        cell.textLabel?.text = RvBusinesses[indexPath.row].name
+        let cell = listViewTable.dequeueReusableCell(withIdentifier: "listCell", for: indexPath) as! ListViewCell
+        cell.nameLabel.text = RvBusinesses[indexPath.row].name
+        cell.addressLabel.text = RvBusinesses[indexPath.row].address
+        
+        print("Address: \(RvBusinesses[indexPath.row].address)")
+        
+        cell.yelpImage.image = #imageLiteral(resourceName: "yelpLogo.png")
+        
         return cell
     }
     
@@ -33,7 +39,7 @@ class ListViewController : UIViewController, UITableViewDelegate, UITableViewDat
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         row = indexPath.row
-        self.performSegue(withIdentifier: "toRV", sender: self)
+      //  self.performSegue(withIdentifier: "toRV", sender: self)
     }
 }
     

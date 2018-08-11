@@ -10,7 +10,10 @@ import Foundation
 import UIKit
 
 class ListViewCell: UITableViewCell {
-
+    @IBOutlet weak var nameLabel: UILabel!
+    @IBOutlet weak var addressLabel: UILabel!
+    @IBOutlet weak var yelpImage: UIImageView!
+    
     
     override func awakeFromNib() {
         super.awakeFromNib()
